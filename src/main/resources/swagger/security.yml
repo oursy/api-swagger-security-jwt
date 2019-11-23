@@ -1,0 +1,64 @@
+openapi: 3.0.1
+info:
+  title: Micronaut Api Security JWT Swagger
+  description: My API
+  license:
+    name: Apache 2.0
+    url: http://foo.bar
+  version: "0.1"
+paths:
+  /authenticate:
+    post:
+      tags:
+        - authenticate
+      summary: authenticate endpoints
+      description: create Token
+      operationId: login
+      parameters: []
+      requestBody:
+        description: An instance of UsernamePasswordCredentials in the body payload
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UsernamePasswordCredentials'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernamePasswordCredentials'
+        required: true
+      responses:
+        200:
+          description: access and refresh tokens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessRefreshToken'
+        400:
+          description: Please enter an account number and password
+        401:
+          description: Incorrect username or password
+components:
+  schemas:
+    AccessRefreshToken:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+        expiresIn:
+          type: integer
+          format: int32
+    UsernamePasswordCredentials:
+      required:
+        - password
+        - username
+      type: object
+      properties:
+        username:
+          minLength: 1
+          type: string
+        password:
+          minLength: 1
+          type: string
